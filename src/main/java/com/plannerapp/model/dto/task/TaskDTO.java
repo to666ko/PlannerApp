@@ -1,32 +1,39 @@
 package com.plannerapp.model.dto.task;
 
+import com.plannerapp.model.entity.TaskEntity;
 import com.plannerapp.model.enums.PriorityName;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-public class TaskAddBindingModel {
+public class TaskDTO {
 
-    @Size(min = 2, max = 50, message = "Description length must be between 2 and 50 characters!")
+    private Long id;
+
     private String description;
 
-    @FutureOrPresent(message = "Due Date must be in the future!")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Due date cannot be null")
+//    @DateTimeFormat(pattern = "yyyy-qMM-dd")
     private LocalDate dueDate;
 
-    @NotNull(message = "You must select a priority!")
     private PriorityName priority;
+
+    public Long getId() {
+        return id;
+    }
+
+    public TaskDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getDescription() {
         return description;
     }
 
-    public TaskAddBindingModel setDescription(String description) {
+    public TaskDTO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -35,7 +42,7 @@ public class TaskAddBindingModel {
         return dueDate;
     }
 
-    public TaskAddBindingModel setDueDate(LocalDate dueDate) {
+    public TaskDTO setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
         return this;
     }
@@ -44,8 +51,20 @@ public class TaskAddBindingModel {
         return priority;
     }
 
-    public TaskAddBindingModel setPriority(PriorityName priority) {
+    public TaskDTO setPriority(PriorityName priority) {
         this.priority = priority;
         return this;
+    }
+
+
+    public static TaskDTO createFromTask(TaskEntity task){
+        TaskDTO taskDTO = new TaskDTO();
+
+        taskDTO.setId(task.getId());
+        taskDTO.setDescription(task.getDescription());
+        taskDTO.setPriority(task.getPriority().getName());
+        taskDTO.setDueDate(task.getDueDate());
+
+        return taskDTO;
     }
 }
